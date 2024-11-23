@@ -1,14 +1,16 @@
 import pytest
 import os
+import sys
+from io import StringIO
+
 from library import Library
 
 
 @pytest.fixture
 def library():
-    # Создаём временную библиотеку с временным файлом
     lib = Library(data_file='test_data.json')
     yield lib
-    # После завершения тестов удалим файл
+
     if os.path.exists('test_data.json'):
         os.remove('test_data.json')
 
@@ -22,6 +24,7 @@ def test_add_book(library):
     assert library.books[-1].author == 'Author Name'
     assert library.books[-1].year == 2021
 
+
 def test_add_book_invalid_data(library):
     """Test adding a book with invalid data."""
     # Try adding a book with invalid data
@@ -30,7 +33,6 @@ def test_add_book_invalid_data(library):
 
     with pytest.raises(ValueError):
         library.add_book('Valid Title', 'Author', -1)  # Year should be a positive integer
-
 
 
 def test_remove_book(library):
@@ -63,6 +65,7 @@ def test_search_books(library):
     assert len(results) == 1
     assert results[0].year == 2020
 
+
 def test_search_books_no_results(library):
     """Test searching books when no results are found."""
     library.add_book('Test Book', 'Test Author', 2020)
@@ -71,7 +74,6 @@ def test_search_books_no_results(library):
 
     results = library.search_books('9999', 'year')
     assert len(results) == 0
-
 
 
 def test_change_status(library):
@@ -99,24 +101,21 @@ def test_display_books(library):
     """Test displaying all books."""
     library.add_book('Test Book', 'Test Author', 2020)
     library.add_book('Another Book', 'Another Author', 2021)
-    # We will redirect stdout to capture the print statements
-    from io import StringIO
-    import sys
+    # Redirect stdout
     captured_output = StringIO()
     sys.stdout = captured_output
 
     library.display_books()
     sys.stdout = sys.__stdout__  # Reset redirect
 
-    # Check if the display output contains the books' details
+    # Check if the display output contains the books details
     assert 'Test Book' in captured_output.getvalue()
     assert 'Another Book' in captured_output.getvalue()
+
 
 def test_display_books_empty(library):
     """Test displaying books when the library is empty."""
     # Redirect stdout
-    from io import StringIO
-    import sys
     captured_output = StringIO()
     sys.stdout = captured_output
 
@@ -125,4 +124,3 @@ def test_display_books_empty(library):
 
     # Check if the display output contains the message for an empty library
     assert 'Библиотека пуста.' in captured_output.getvalue()
-
