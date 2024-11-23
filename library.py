@@ -42,7 +42,7 @@ class Library:
 
     def remove_book(self, book_id: int) -> bool:
         '''Remove a book by ID.'''
-        book = next((b for b in self.books if b.book_id == book_id), None)
+        book = self.get_book_by_id(book_id)
         if book:
             self.books.remove(book)
             self.save_to_file()
@@ -61,10 +61,16 @@ class Library:
             for book in self.books:
                 print(book)
 
+    def book_exists(self, book_id: int) -> bool:
+        return any(b.book_id == book_id for b in self.books)
+
+    def get_book_by_id(self, book_id: int) -> Book | None:
+        return next((b for b in self.books if b.book_id == book_id), None)
+
     def change_status(self, book_id: int, status: str) -> bool:
         '''Change the status of a book.'''
-        book = next((b for b in self.books if b.book_id == book_id), None)
-        if book and status in ['В наличии', 'Выдана']:
+        book = self.get_book_by_id(book_id)
+        if book:
             book.status = status
             self.save_to_file()
             return True
