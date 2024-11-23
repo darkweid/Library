@@ -35,12 +35,15 @@ def add_book(library: Library) -> None:
     """
     title = input('Введите название книги: ')
     author = input('Введите автора книги: ')
+    year = input('Введите год издания книги: ')
+
     try:
-        year = int(input('Введите год издания книги: '))
         library.add_book(title, author, year)
         print('Книга добавлена.')
-    except ValueError:
-        print('Год издания должен быть числом.')
+    except ValueError as e:
+        print(e)
+        print('Книга не добавлена.')
+
 
 
 def delete_book(library: Library) -> None:
