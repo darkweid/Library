@@ -45,7 +45,6 @@ def add_book(library: Library) -> None:
         print('Книга не добавлена.')
 
 
-
 def delete_book(library: Library) -> None:
     """
     Deletes a book from the library by its ID.
@@ -53,7 +52,6 @@ def delete_book(library: Library) -> None:
     Displays all books and prompts the user for the book's ID to remove.
     If the book with the given ID is not found, an error message is displayed.
     """
-    library.display_books()
     try:
         book_id = int(input('Введите ID книги для удаления: '))
         if library.remove_book(book_id):
@@ -110,7 +108,7 @@ def update_status(library: Library) -> None:
         else:
             print('Некорректный статус.')
     except ValueError:
-        print('ID должен быть числом.')
+        print('ID книги должен быть числом.')
 
 
 def display_books(library: Library) -> None:
@@ -129,7 +127,7 @@ def main() -> None:
     Displays a welcome message and then continuously prompts the user
     for an action until they choose to exit the program.
     """
-    print('Добро пожаловать в систему управления библиотекой!')
+    print('\nДобро пожаловать в систему управления библиотекой!')
     print('Здесь вы можете добавлять, удалять, искать и отображать книги.')
     print('Используйте цифры в меню, чтобы выбрать необходимое действие.')
 
