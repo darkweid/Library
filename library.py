@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 
 class Book:
@@ -61,7 +62,7 @@ class Library:
         with open(self.data_file, 'w', encoding='utf-8') as file:
             json.dump([book.__dict__ for book in self.books], file, ensure_ascii=False, indent=4)
 
-    def add_book(self, title: str, author: str, year: int) -> None:
+    def add_book(self, title: str, author: str, year: str) -> None:
         """
         Add a new book to the library.
 
@@ -69,6 +70,17 @@ class Library:
         :param author: The author of the new book.
         :param year: The year the new book was published.
         """
+        if not title or not author:
+            raise ValueError("Для книги должны быть указаны название и автор.")
+
+        try:
+            year = int(year)
+        except ValueError:
+            raise ValueError("Год должен быть числом.")
+        current_year = datetime.now().year
+        if year < 1000 or year > current_year:
+            raise ValueError(f"Год должен быть в диапазоне от 1000 до {current_year}.")
+
         book_id = max((book.book_id for book in self.books), default=0) + 1
         new_book = Book(book_id, title, author, year)
         self.books.append(new_book)
